@@ -22,12 +22,3 @@ target 'hhh' do
     flipper_post_install(installer)
   end
 end
-
-target 'hhh-tvOS' do
-  # Pods for hhh-tvOS
-
-  target 'hhh-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end
