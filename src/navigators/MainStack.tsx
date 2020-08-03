@@ -1,19 +1,46 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  ScrollView,
+  Text,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import {
   createStackNavigator,
   StackScreenProps,
 } from '@react-navigation/stack';
-import { MapScreen } from '@src/screens';
+
+import { ScrollContext } from '../App';
 
 const HomeScreen: React.SFC<StackScreenProps<RootStackParamList, 'Home'>> = ({
   navigation,
 }) => {
+  const { setScrollPosition } = React.useContext(ScrollContext);
+  const [offset, setOffset] = React.useState(0);
+
+  const setScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentOffset = e.nativeEvent.contentOffset.y;
+    const dif = currentOffset - offset;
+
+    if (dif >= 0) {
+      setScrollPosition(e.nativeEvent.contentOffset.y);
+    } else {
+      setScrollPosition(e.nativeEvent.contentOffset.y - 300);
+    }
+    setOffset(currentOffset);
+  };
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button onPress={() => navigation.navigate('Map')} title="맵으로 이동" />
-    </View>
+    <SafeAreaView>
+      <ScrollView onScroll={setScroll} scrollEventThrottle={1}>
+        <Text style={{ fontSize: 50 }}>또리또리</Text>
+        <Text style={{ fontSize: 150 }}>또리또리</Text>
+        <Text style={{ fontSize: 150 }}>또리또리</Text>
+        <Text style={{ fontSize: 170 }}>또리또리</Text>
+        <Text style={{ fontSize: 170 }}>또리또리</Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -22,8 +49,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 function MainStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Map" component={MapScreen} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ header: () => null }}
+      />
     </Stack.Navigator>
   );
 }
