@@ -32,12 +32,17 @@ const CustomTabBar = (
 
   const bottom = AnimatedBottom.interpolate({
     inputRange: [-100, 0, 150],
-    outputRange: [getBottomSpace(), getBottomSpace(), -getBottomSpace() - 44],
+    outputRange: [getBottomSpace(), getBottomSpace(), -getBottomSpace() + 20],
     extrapolate: 'clamp',
   });
 
+  const opacity = AnimatedBottom.interpolate({
+    inputRange: [0, 60],
+    outputRange: [1, 0],
+  });
+
   return (
-    <Animated.View style={[styles.tabbar, { bottom }]}>
+    <Animated.View style={[styles.tabbar, { bottom, opacity }]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
